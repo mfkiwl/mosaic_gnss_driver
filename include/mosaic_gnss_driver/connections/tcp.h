@@ -5,57 +5,62 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 
-namespace mosaic_gnss_driver::connections
+namespace mosaic_gnss_driver
 {
-    /**
-     * Represents a TCP connection
-     */
-    class TCP : public Connection
+    namespace connections
     {
-    private:
-        static constexpr const char *const type = "TCP";
-
         /**
-         * (Re)configure the driver with a set of message options
-         * 
-         * @param opts: Configuration options
-         * 
-         * @return True on success, false otherwise
+         * Represents a TCP connection
          */
-        bool _configure(const Options &opts);
+        class TCP : public Connection
+        {
+        private:
+            static constexpr const char *const type = "TCP";
 
-        boost::asio::io_service m_IoService;
-        boost::asio::ip::tcp::socket m_TcpSocket;
-        boost::array<uint8_t, 10000> m_SocketBuffer;
+            /**
+             * (Re)configure the driver with a set of message options
+             * 
+             * @param opts: Configuration options
+             * 
+             * @return True on success, false otherwise
+             */
+            bool _configure(const Options &opts);
 
-    protected:
-        static const size_t DEFAULT_TCP_PORT = 3001;
+            boost::asio::io_service m_IoService;
+            boost::asio::ip::tcp::socket m_TcpSocket;
+            boost::array<uint8_t, 10000> m_SocketBuffer;
 
-    public:
-        /// Constructor
-        explicit TCP(buffer_t &buf);
+        protected:
+            static const size_t DEFAULT_TCP_PORT = 3001;
 
-        /**
-         * Attempts to connect to the module via TCP
-         * 
-         * @param device: A host:port specification eg: 192.168.3.1:3001
-         * @param opts: Configuration options
-         * 
-         * @return True if successful, false otherwise
-         */
-        bool connect(const std::string &device, const Options &opts = {}) override;
+        public:
+            /// Constructor
+            explicit TCP(buffer_t &buf);
 
-        void disconnect() override;
+            /**
+             * Attempts to connect to the module via TCP
+             * 
+             * @param device: A host:port specification eg: 192.168.3.1:3001
+             * @param opts: Configuration options
+             * 
+             * @return True if successful, false otherwise
+             */
+            bool connect(const std::string &device, const Options &opts = {}) override;
 
-        bool is_connected() const override
-        { return connected; }
+            void disconnect() override;
 
-        ReadResult read() override;
+            bool is_connected() const override
+            {
+                return connected;
+            }
 
-        bool write(const std::string &command) override;
+            ReadResult read() override;
 
-        /// Destructor
-        ~TCP();
-    };
-} // namespace mosaic_gnss_driver::connections
+            bool write(const std::string &command) override;
+
+            /// Destructor
+            ~TCP();
+        };
+    } // namespace connections
+} // namespace mosaic_gnss_driver
 #endif //MOSAIC_GNSS_DRIVER_TCP_H

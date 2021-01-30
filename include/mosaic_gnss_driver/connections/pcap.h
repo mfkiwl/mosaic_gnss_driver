@@ -7,48 +7,52 @@
 #include <memory>
 #include <vector>
 
-namespace mosaic_gnss_driver::connections
+namespace mosaic_gnss_driver
 {
-    /**
-     * Represents a PCAP connection
-     */
-    class PCAP : public Connection
+    namespace connections
     {
-        static constexpr const char *const type = "PCAP";
-
-    protected:
-        static const size_t BUFFER_SIZE = 100;
-
-        pcap_t *dev{nullptr};
-        bpf_program packet_filter{};
-        char err_buffer[BUFFER_SIZE]{};
-        std::vector<uint8_t> last_packet;
-
-    public:
-        using Connection::Connection; // Use superclass constructor
-
         /**
-         * Tries to connect to a PCAP file
-         * 
-         * @param device: Path of file to connect to
-         * @param opts: Configuration options, redundant in this case
-         *
-         * @return True if successful, false otherwise
+         * Represents a PCAP connection
          */
-        bool connect(const std::string &device, const Options &opts = {}) override;
+        class PCAP : public Connection
+        {
+            static constexpr const char *const type = "PCAP";
 
-        void disconnect() override;
+        protected:
+            static const size_t BUFFER_SIZE = 100;
 
-        bool is_connected() const override
-        { return dev; }
+            pcap_t *dev{nullptr};
+            bpf_program packet_filter{};
+            char err_buffer[BUFFER_SIZE]{};
+            std::vector<uint8_t> last_packet;
 
-        ReadResult read() override;
+        public:
+            using Connection::Connection; // Use superclass constructor
 
-        bool write(const std::string &command) override;
+            /**
+             * Tries to connect to a PCAP file
+             * 
+             * @param device: Path of file to connect to
+             * @param opts: Configuration options, redundant in this case
+             *
+             * @return True if successful, false otherwise
+             */
+            bool connect(const std::string &device, const Options &opts = {}) override;
 
-        /// Destructor
-        ~PCAP();
-    };
-} // namespace mosaic_gnss_driver::connections
+            void disconnect() override;
 
+            bool is_connected() const override
+            {
+                return dev;
+            }
+
+            ReadResult read() override;
+
+            bool write(const std::string &command) override;
+
+            /// Destructor
+            ~PCAP();
+        };
+    } // namespace connections
+} // namespace mosaic_gnss_driver
 #endif //MOSAIC_GNSS_DRIVER_PCAP_H
