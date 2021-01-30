@@ -38,7 +38,7 @@ namespace sbf
         const uint8_t *data_end{nullptr};
 
         /// Next data to read
-        const uint8_t *read_ptr{nullptr};    // Current position in buffer + data
+        const uint8_t *read_ptr{nullptr}; // Current position in buffer + data
         /// Start of block being parsed
         const uint8_t *block_start{nullptr};
 
@@ -48,7 +48,6 @@ namespace sbf
         using parse_table_t = std::unordered_map<sbf::u4, std::function<void(const uint8_t *, const sbf::u2,
                                                                              const sbf::u1)>>;
         parse_table_t parse_table{};
-
 
         /**
          * Parses the block starting at `block_start`
@@ -120,7 +119,7 @@ namespace sbf
          */
         void parse(const uint8_t *data, size_t size);
 
-        struct
+        struct _Parsers
         {
             mosaic_gnss_driver::DataBuffers &data_buf;
             parse_table_t &pt;
@@ -128,17 +127,18 @@ namespace sbf
             sbf::block_parsers::Geodetic geodetic{data_buf};
             sbf::block_parsers::Cartesian cartesian{data_buf};
 
+            _Parsers(mosaic_gnss_driver::DataBuffers &dbuff, parse_table_t &_pt) : data_buf(dbuff), pt(_pt)
+            {
+            }
+            
             void enable_geodetic()
             {
                 data_buf.nav_sat_fix.enabled = true;
                 data_buf.velocity.enabled = true;
 
-                pt[4007] = [&g = geodetic](auto block_ptr, auto len, auto rev_num)
-                { g.PVTGeodetic(block_ptr, len, rev_num); };
-                pt[5906] = [&g = geodetic](auto block_ptr, auto len, auto rev_num)
-                { g.PosCovGeodetic(block_ptr, len, rev_num); };
-                pt[5908] = [&g = geodetic](auto block_ptr, auto len, auto rev_num)
-                { g.VelCovGeodetic(block_ptr, len, rev_num); };
+                pt[4007] = [&g = geodetic](auto block_ptr, auto len, auto rev_num) { g.PVTGeodetic(block_ptr, len, rev_num); };
+                pt[5906] = [&g = geodetic](auto block_ptr, auto len, auto rev_num) { g.PosCovGeodetic(block_ptr, len, rev_num); };
+                pt[5908] = [&g = geodetic](auto block_ptr, auto len, auto rev_num) { g.VelCovGeodetic(block_ptr, len, rev_num); };
             }
 
             void enable_cartesian()
@@ -146,12 +146,9 @@ namespace sbf
                 data_buf.pose.enabled = true;
                 data_buf.velocity.enabled = true;
 
-                pt[4006] = [&g = cartesian](auto block_ptr, auto len, auto rev_num)
-                { g.PVTCartesian(block_ptr, len, rev_num); };
-                pt[5905] = [&g = cartesian](auto block_ptr, auto len, auto rev_num)
-                { g.PosCovCartesian(block_ptr, len, rev_num); };
-                pt[5907] = [&g = cartesian](auto block_ptr, auto len, auto rev_num)
-                { g.VelCovCartesian(block_ptr, len, rev_num); };
+                pt[4006] = [&g = cartesian](auto block_ptr, auto len, auto rev_num) { g.PVTCartesian(block_ptr, len, rev_num); };
+                pt[5905] = [&g = cartesian](auto block_ptr, auto len, auto rev_num) { g.PosCovCartesian(block_ptr, len, rev_num); };
+                pt[5907] = [&g = cartesian](auto block_ptr, auto len, auto rev_num) { g.VelCovCartesian(block_ptr, len, rev_num); };
             }
 
         } parsers{data_buf, parse_table};
