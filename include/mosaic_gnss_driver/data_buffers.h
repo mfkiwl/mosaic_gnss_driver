@@ -11,6 +11,8 @@
 #include <nmea_msgs/Sentence.h>
 #include <nmea_msgs/Gpgga.h>
 
+#include "mosaic_utils/make_unique.hpp"
+
 #ifdef __JETBRAINS_IDE__ // remove flag to get ide hints on entire class
 #undef MOSAIC_GNSS_CORE_ONLY
 #endif
