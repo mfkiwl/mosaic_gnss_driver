@@ -83,7 +83,7 @@ namespace sbf
             // Fill PVT
             pose->header.stamp = ros::Time::now(); // TODO: use GNSS time
             pose->header.frame_id = "geodetic";
-            static auto rad2deg = [](auto val) { return val * 180 / 3.141592653; };
+            // static auto rad2deg = [](auto val) { return val * 180 / 3.141592653; };
             auto &position = pose->pose.pose.position;
             position.x = block->x;
             position.y = block->y;

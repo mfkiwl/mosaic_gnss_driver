@@ -8,6 +8,11 @@ namespace sbf
 {
     namespace block_parsers
     {
+        template <typename __T>
+        __T rad2deg(__T val)
+        {
+            return val * 180 / 3.141592653;
+        }
         /**
      * Parses messages of the Geodetic subtype, creates nav_msgs::NavSatFix and sensor_msgs::TwistWithCovarianceStamped
      */

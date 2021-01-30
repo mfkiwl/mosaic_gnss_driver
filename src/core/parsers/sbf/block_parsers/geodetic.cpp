@@ -85,7 +85,7 @@ namespace sbf
             // Fill PVT
             nav_sat_fix->header.stamp = ros::Time::now(); // TODO: use GNSS time
             nav_sat_fix->header.frame_id = frame_id;
-            static auto rad2deg = [](auto val) { return val * 180 / 3.141592653; };
+            // static auto rad2deg = [](auto val) { return val * 180 / 3.141592653; };
             nav_sat_fix->latitude = rad2deg(block->Latitude);
             nav_sat_fix->longitude = rad2deg(block->Longitude);
             nav_sat_fix->altitude = block->Height;
