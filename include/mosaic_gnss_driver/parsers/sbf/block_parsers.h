@@ -23,7 +23,8 @@ namespace sbf::block_parsers
 
     public:
         Geodetic(mosaic_gnss_driver::DataBuffers &data_buf) : db(data_buf)
-        {}
+        {
+        }
 
         void PVTGeodetic(const uint8_t *block_ptr, sbf::u2 length, sbf::u1 rev_num);
 
@@ -46,7 +47,8 @@ namespace sbf::block_parsers
 
     public:
         Cartesian(mosaic_gnss_driver::DataBuffers &data_buf) : db(data_buf)
-        {}
+        {
+        }
 
         void PVTCartesian(const uint8_t *block_ptr, sbf::u2 length, sbf::u1 rev_num);
 
@@ -54,5 +56,5 @@ namespace sbf::block_parsers
 
         void VelCovCartesian(const uint8_t *block_ptr, sbf::u2 length, sbf::u1 rev_num);
     };
-}
+} // namespace sbf::block_parsers
 #endif //MOSAIC_GNSS_DRIVER_BLOCK_PARSERS_H

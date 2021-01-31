@@ -2,8 +2,8 @@
 #define MOSAIC_GNSS_DRIVER_HELPERS_H
 
 #include <cinttypes> // For ints of specific width.
-#include <memory> // For unique_ptr / make_unique
-#include <endian.h> // For little endian check
+#include <memory>    // For unique_ptr / make_unique
+#include <endian.h>  // For little endian check
 
 /**
  * Contains:
@@ -25,8 +25,7 @@ namespace sbf
 #endif
 
     // TWOS_COMPLEMENT
-    static_assert((uint32_t) (-1) == (uint32_t) 0xFFFFFFFFuL, "Wrong signed integer format. Require two's complement");
-
+    static_assert((uint32_t)(-1) == (uint32_t)0xFFFFFFFFuL, "Wrong signed integer format. Require two's complement");
 
     static_assert(sizeof(float) == 4, "Bad float size, no 4 byte floating point type");
     static_assert(sizeof(double) == 8, "Bad double size, no 8 byte floating point type");
@@ -44,7 +43,6 @@ namespace sbf
     using f4 = float32_t;
     using f8 = float64_t;
 #pragma clang diagnostic pop
-
 
 #pragma pack(push, 1) // Packs the struct tightly, no gaps b/w objs
     struct Header
@@ -65,4 +63,3 @@ namespace sbf
 
 } // namespace sbf
 #endif //MOSAIC_GNSS_DRIVER_HELPERS_H
-
