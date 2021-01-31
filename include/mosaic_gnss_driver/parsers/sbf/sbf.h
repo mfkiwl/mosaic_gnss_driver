@@ -130,15 +130,15 @@ namespace sbf
             _Parsers(mosaic_gnss_driver::DataBuffers &dbuff, parse_table_t &_pt) : data_buf(dbuff), pt(_pt)
             {
             }
-            
+
             void enable_geodetic()
             {
                 data_buf.nav_sat_fix.enabled = true;
                 data_buf.velocity.enabled = true;
 
-                pt[4007] = [&g = geodetic](auto block_ptr, auto len, auto rev_num) { g.PVTGeodetic(block_ptr, len, rev_num); };
-                pt[5906] = [&g = geodetic](auto block_ptr, auto len, auto rev_num) { g.PosCovGeodetic(block_ptr, len, rev_num); };
-                pt[5908] = [&g = geodetic](auto block_ptr, auto len, auto rev_num) { g.VelCovGeodetic(block_ptr, len, rev_num); };
+                pt[4007] = [&](const uint8_t *block_ptr, const sbf::u2 len, const sbf::u1 rev_num) { geodetic.PVTGeodetic(block_ptr, len, rev_num); };
+                pt[5906] = [&](const uint8_t *block_ptr, const sbf::u2 len, const sbf::u1 rev_num) { geodetic.PosCovGeodetic(block_ptr, len, rev_num); };
+                pt[5908] = [&](const uint8_t *block_ptr, const sbf::u2 len, const sbf::u1 rev_num) { geodetic.VelCovGeodetic(block_ptr, len, rev_num); };
             }
 
             void enable_cartesian()
@@ -146,9 +146,9 @@ namespace sbf
                 data_buf.pose.enabled = true;
                 data_buf.velocity.enabled = true;
 
-                pt[4006] = [&g = cartesian](auto block_ptr, auto len, auto rev_num) { g.PVTCartesian(block_ptr, len, rev_num); };
-                pt[5905] = [&g = cartesian](auto block_ptr, auto len, auto rev_num) { g.PosCovCartesian(block_ptr, len, rev_num); };
-                pt[5907] = [&g = cartesian](auto block_ptr, auto len, auto rev_num) { g.VelCovCartesian(block_ptr, len, rev_num); };
+                pt[4006] = [&](const uint8_t *block_ptr, const sbf::u2 len, const sbf::u1 rev_num) { cartesian.PVTCartesian(block_ptr, len, rev_num); };
+                pt[5905] = [&](const uint8_t *block_ptr, const sbf::u2 len, const sbf::u1 rev_num) { cartesian.PosCovCartesian(block_ptr, len, rev_num); };
+                pt[5907] = [&](const uint8_t *block_ptr, const sbf::u2 len, const sbf::u1 rev_num) { cartesian.VelCovCartesian(block_ptr, len, rev_num); };
             }
 
         } parsers{data_buf, parse_table};
